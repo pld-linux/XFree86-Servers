@@ -1,7 +1,7 @@
 Summary:	XFree86 servers
 Name:		XFree86-Servers
 Version:	3.3.6
-Release:	34
+Release:	35
 License:	MIT
 Group:		X11/XFree86/Servers
 Group(de):	X11/XFree86/Server
@@ -575,7 +575,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(4755,root,root) %{_bindir}/Xwrapper
 %attr(755,root,root) %{_bindir}/X
-%attr(640,root,root) %config %verify(not size mtime md5) /etc/pam.d/xserver
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/pam.d/xserver
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) /etc/security/blacklist.xserver
 %config(missingok) /etc/security/console.apps/xserver
 %{_mandir}/man5/XF86Config-3.5x*
