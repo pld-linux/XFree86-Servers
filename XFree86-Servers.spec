@@ -409,7 +409,7 @@ monochromatycznym framebufferem SBUS.
 
 %package -n XFree86-Sun24
 Summary:	The X server for Suns with all supported SBUS framebuffers
-Summary(pl):	X serwer dla Sunów z framebufferami SBUS.
+Summary(pl):	X serwer dla Sunów z framebufferami SBUS
 Group:		X11/XFree86/Servers
 Obsoletes:	X11R6.1-Sun24
 Provides:	Xserver
