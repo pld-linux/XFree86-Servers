@@ -45,6 +45,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		docsrc		xc/programs/Xserver/hw/xfree86/doc
 
 %description
+This package contains old XFree86 servers (taken from version 3.3.6)
+to use with old video cards, not supported by XFree86 4.x.
+
+%description -l pl
+Ten pakiet zawiera stare serwery XFree86 (wziête z wersji 3.3.6) dla
+starych kart graficznych, nie obs³ugiwanych przez XFree86 4.x.
 
 %package common
 Summary:	The XFree86 servers - common files
