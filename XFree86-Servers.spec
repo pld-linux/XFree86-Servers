@@ -1,7 +1,7 @@
 Summary:	XFree86 servers
 Name:		XFree86-Servers
 Version:	3.3.6
-Release:	35
+Release:	36
 License:	MIT
 Group:		X11/XFree86/Servers
 Source0:	ftp://ftp.xfree86.org/pub/XFree86/3.3.6/source/X336src-1.tgz
@@ -38,6 +38,7 @@ BuildRequires:	flex
 BuildRequires:	bison
 BuildRequires:	zlib-devel
 BuildRequires:	pam-devel
+Requires:	pam >= 0.77.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix		/usr/X11R6
