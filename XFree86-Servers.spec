@@ -67,7 +67,7 @@ but is not supported by XFree 4.x. If your card is well supported by
 XFree 4.x, use Xserver with appropriate driver from XFree 4.x instead.
 
 Please see the XFree86 video card/server list available from the
-XFree86 Project's website at http://www.xfree86.org for a definitive
+XFree86 Project's website at http://www.xfree86.org/ for a definitive
 list of X servers and which video cards they support.
 
 %description -l pl common
@@ -79,7 +79,7 @@ Je¿eli twoja karta jest dobrze obs³ugiwana przez XFree 4.x, lepiej
 u¿yj X serwera wraz z odpowiednim driverem z XFree 4.x
 
 Pe³n± listê X serwerów oraz kart które obs³uguj± mo¿na znale¼æ pod
-adresem http://www.xfree86.org.
+adresem http://www.xfree86.org/.
 
 %package -n XFree86-S3
 Summary:	The XFree86 server for video cards based on older S3 chips
@@ -143,7 +143,7 @@ Requires:	%{name}-common = %{version}
 XFree86-Mach64 is the server package for cards based on ATI's Mach64
 chip, such as the Graphics Xpression, GUP Turbo, and WinTurbo cards.
 Note that this server is known to have problems with some Mach64
-cards. Check http://www.xfree86.org for current information on
+cards. Check http://www.xfree86.org/ for current information on
 updating this server.
 
 %description -l pl -n XFree86-Mach64
@@ -508,16 +508,14 @@ ln -sf ../../include/Xosdefs.h X11
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{/etc/{pam.d,security/console.apps},%{_includedir}}
 
-install -d $RPM_BUILD_ROOT/etc/pam.d
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/xserver
-install -d $RPM_BUILD_ROOT/etc/security/console.apps
 touch $RPM_BUILD_ROOT/etc/security/console.apps/xserver
 touch $RPM_BUILD_ROOT/etc/security/blacklist.xserver
 
-install -d $RPM_BUILD_ROOT%{_includedir}
-
-%{__make} DESTDIR=$RPM_BUILD_ROOT install install.man -C xc
+%{__make} install install.man -C xc \
+	DESTDIR=$RPM_BUILD_ROOT
 
 # setup the default X server
 rm -f $RPM_BUILD_ROOT%{_bindir}/X
