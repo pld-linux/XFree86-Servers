@@ -7,6 +7,7 @@ Group:		X11/XFree86/Servers
 Source0:	ftp://ftp.xfree86.org/pub/XFree86/3.3.6/source/X336src-1.tgz
 # Source0-md5:	bbfa360d10ce91ab37f24f197a31b485
 Source1:	ftp://ftp.dcs.ed.ac.uk/pub/jec/programs/xfsft/xfsft-1.1.6.tar.gz
+# Source1-md5:	88c65d3c314dab6b000499861a7f4865
 Source2:	xserver.pamd
 Patch0:		%{name}-rh.patch
 Patch1:		%{name}-parallelmake.patch
