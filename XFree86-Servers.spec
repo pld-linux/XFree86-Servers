@@ -6,7 +6,7 @@ License:	MIT
 Group:		X11/XFree86/Servers
 Group(de):      X11/XFree86/Server
 Group(pl):      X11/XFree86/Serwery
-Source0:	ftp://ftp.xfree86.org/pub/XFree86/3.3.6/X336src-1.tar.bz2
+Source0:	ftp://ftp.xfree86.org/pub/XFree86/3.3.6/source/X336src-1.tgz
 Source1:	ftp://ftp.dcs.ed.ac.uk/pub/jec/programs/xfsft/xfsft-1.1.6.tar.gz
 Source2:	xserver.pamd
 Patch0:		%{name}-rh.patch
