@@ -41,7 +41,7 @@ BuildRequires:	pam-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_prefix		/usr/X11R6
-%define		_mandir		/usr/X11R6/man
+%define		_mandir		%{_prefix}/man
 %define		docsrc		xc/programs/Xserver/hw/xfree86/doc
 
 %description
@@ -519,7 +519,7 @@ ln -sf ../../include/Xosdefs.h X11
 %{__make} World -C xc BOOTSTRAPCFLAGS="%{rpmcflags} -Wa,-m21164a" \
 	CDEBUGFLAGS="%{rpmcflags} -Wa,-m21164a"
 %else
-%{__make} World -C xc BOOTSTRAPCFLAGS="%{?debug:-O -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" \
+%{__make} World -C xc BOOTSTRAPCFLAGS="%{rpmcflags} -pipe" \
 	CDEBUGFLAGS="%{rpmcflags} -pipe"
 %endif
 
