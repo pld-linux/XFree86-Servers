@@ -305,7 +305,7 @@ w tym kart Genoa 8900 Phantom 32i, Hercules Dynamite, LeadTek WinFast
 S200, Sigma Concorde, STB LightSpeed, TechWorks Thunderbolt, ViewTop
 PCI.
 
-%package -n XFree86-3DLabs 
+%package -n XFree86-3DLabs
 Summary:	The XFree86 server for 3Dlabs video cards
 Summary(pl):	Serwer XFree86 dla kart na uk³adzie 3Dlabs
 Group:		X11/XFree86/Servers
@@ -431,7 +431,7 @@ SBUS.
 # install xfsft
 tar x -C xc/lib -f xfsft-1.1.6/libfont.tar
 patch -p0 -s -d xc/lib < xfsft-1.1.6/libfont.patch
- 
+
 %patch0 -p1
 %patch1 -p1
 %patch2 -p0
