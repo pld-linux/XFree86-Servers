@@ -516,11 +516,11 @@ ln -sf ../../include/Xosdefs.h X11
 
 %build
 %ifarch alpha
-%{__make} World -C xc BOOTSTRAPCFLAGS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -Wa,-m21164a" \
-	CDEBUGFLAGS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -Wa,-m21164a"
+%{__make} World -C xc BOOTSTRAPCFLAGS="%{rpmcflags} -Wa,-m21164a" \
+	CDEBUGFLAGS="%{rpmcflags} -Wa,-m21164a"
 %else
 %{__make} World -C xc BOOTSTRAPCFLAGS="%{?debug:-O -g}%{!?debug:$RPM_OPT_FLAGS} -pipe" \
-	CDEBUGFLAGS="%{?debug:-O0 -g}%{!?debug:$RPM_OPT_FLAGS} -pipe"
+	CDEBUGFLAGS="%{rpmcflags} -pipe"
 %endif
 
 # XXX: applies to gcc "2.96" only??? needs testing with 2.95*... -- qboosh
