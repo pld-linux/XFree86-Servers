@@ -5,6 +5,7 @@ Release:	35
 License:	MIT
 Group:		X11/XFree86/Servers
 Source0:	ftp://ftp.xfree86.org/pub/XFree86/3.3.6/source/X336src-1.tgz
+# Source0-md5:	bbfa360d10ce91ab37f24f197a31b485
 Source1:	ftp://ftp.dcs.ed.ac.uk/pub/jec/programs/xfsft/xfsft-1.1.6.tar.gz
 Source2:	xserver.pamd
 Patch0:		%{name}-rh.patch
