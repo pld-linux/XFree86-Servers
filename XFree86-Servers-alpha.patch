@@ -1,0 +1,15 @@
+--- xc/config/imake/imakemdep.h.jj	Sat Jan  8 13:21:02 2000
++++ xc/config/imake/imakemdep.h	Wed Jun  7 01:01:17 2000
+@@ -330,6 +330,12 @@ char *cpp_argv[ARGUMENTS] = {
+ # ifdef __i386__
+ 	"-D__i386__",
+ # endif
++# ifdef __alpha__
++	"-D__alpha__",
++# endif
++# ifdef __ia64__
++	"-D__ia64__",
++# endif
+ # ifdef __sparc__
+ 	"-D__sparc__",
+ # endif

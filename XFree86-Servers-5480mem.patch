@@ -1,0 +1,38 @@
+--- XFree86-3.3.6/xc/programs/Xserver/hw/xfree86/vga256/drivers/cirrus/cir_driver.c.5480mem	Sat Jan  8 13:26:49 2000
++++ XFree86-3.3.6/xc/programs/Xserver/hw/xfree86/vga256/drivers/cirrus/cir_driver.c	Mon Feb 21 21:53:18 2000
+@@ -1553,17 +1553,18 @@
+ 	  	/* Use the DRAM bandwidth bit and the DRAM bank switching */
+ 	  	/* bit to figure out the amount of memory. */
+ 	  	unsigned char SRF;
++	  	unsigned char SR17;
++
+ 	  	vga256InfoRec.videoRam = 512;
+ 	  	outb(0x3c4, 0x0f);
+ 	  	SRF = inb(0x3c5);
++	  	outb(0x3c4, 0x17);
++	  	SR17 = inb(0x3c5);
+ 	        if (cirrusChip == CLGD5446) {
+ 	            /*
+ 	             * The CL-GD5446 has many different DRAM
+ 	             * configurations.
+ 	             */
+-	            unsigned char SR17;
+-	            outb(0x3c4, 0x17);
+-	            SR17 = inb(0x3c5);
+   	            vga256InfoRec.videoRam = 1024;
+ 	  	    if ((SRF & 0x18) == 0x18) {
+ 	  	        /* 64-bit DRAM bus. */
+@@ -1617,6 +1618,13 @@
+ 	  		/* must be twice as much memory installed. */
+ 	  		/* (4MB on the 5434) */
+ 	  		vga256InfoRec.videoRam *= 2;
++	  	    if (cirrusChip == CLGD5480 && (SR17 & 0x80))
++		    	/* 5480's with one 2MB chip show up as 1MB
++			   because they have a 32-bit DRAM bus, but
++			   this seems to fix it.  This is experimental
++			   black magic; if it breaks anything for
++			   you, please help find a better trigger... */
++		    	vga256InfoRec.videoRam *= 2;
+ 	        }
+ 	  }
+ 	  else 

@@ -1,0 +1,705 @@
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/accel/mach64/ativga.c devel/xc/programs/Xserver/hw/xfree86/accel/mach64/ativga.c
+*** base/xc/programs/Xserver/hw/xfree86/accel/mach64/ativga.c	Wed Feb  9 20:05:48 2000
+--- devel/xc/programs/Xserver/hw/xfree86/accel/mach64/ativga.c	Fri Feb  4 09:13:42 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/ativga.c,v 3.7.2.1 1998/10/18 20:42:04 hohndel Exp $ */
+  /***************************************************************************
+   * Start of VGA font saving and restoration code.
+   * Created: Sun Jun 27 12:50:09 1993 by faith@cs.unc.edu
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/ativga.c,v 3.7.2.1tsi Exp $ */
+  /***************************************************************************
+   * Start of VGA font saving and restoration code.
+   * Created: Sun Jun 27 12:50:09 1993 by faith@cs.unc.edu
+***************
+*** 55,60 ****
+--- 55,61 ----
+  
+  typedef struct {
+     vgaHWRec std;
++    unsigned char shadow_crtc[25];
+     unsigned char ATIExtRegBank[11]; /* ATI Registers B0,B1,B2,B3,
+  				       B5, B6,B8,B9, BE,A6,A7 */
+  } SaveBlock;
+***************
+*** 104,111 ****
+--- 105,114 ----
+  void mach64SaveVGAInfo(screen_idx)
+       int screen_idx;
+  {
++    unsigned long saved_lcd_gen_ctrl = 0, lcd_gen_ctrl = 0;
+     unsigned char b2_save;
+     unsigned char b8_save;
++    int i;
+  
+     if (!vgaBase) {
+        vgaBase = xf86MapVidMem(screen_idx, VGA_REGION, (pointer)0xa0000,
+***************
+*** 114,123 ****
+  
+     vgaIOBase = (inb(0x3cc) & 0x01) ? 0x3D0 : 0x3B0;
+     
+-    /* This part is copied from ATISave() in
+-     * xf86/vga256/drivers/ati/driver.c
+-     */
+- 
+     if (!mach64IntegratedController) {
+       /* Unlock ATI specials */
+       outw(ATIExtReg, (((b8_save = inATI(0xb8)) & 0xC0) << 8) | 0xb8);
+--- 117,122 ----
+***************
+*** 126,132 ****
+--- 125,172 ----
+       outw(ATIExtReg, 0x00b2);	/* segment select 0 */
+     }
+  
++    if (mach64LCDPanelID >= 0) {
++       if (mach64ChipType == MACH64_LG_ID) {
++ 	 saved_lcd_gen_ctrl = regr(LCD_GEN_CTRL);
++ 	 lcd_gen_ctrl = saved_lcd_gen_ctrl &
++ 	    ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++ 	 regw(LCD_GEN_CTRL, lcd_gen_ctrl);
++       } else {
++ 	 outb(ioLCD_INDEX, LCD_GEN_CNTL);
++ 	 saved_lcd_gen_ctrl = inl(ioLCD_DATA);
++ 	 lcd_gen_ctrl = saved_lcd_gen_ctrl &
++ 	    ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++ 	 outl(ioLCD_DATA, lcd_gen_ctrl);
++       }
++    }
++ 
+     vgaNewVideoState = vgaHWSave(vgaNewVideoState, sizeof(SaveBlock));
++    /* Unlock VGA CRTC */
++    outw(vgaIOBase + 4, ((save->std.CRTC[17] & 0x7F) << 8) | 17);
++ 
++    if (mach64LCDPanelID >= 0) {
++       lcd_gen_ctrl |= SHADOW_EN | SHADOW_RW_EN;
++       if (mach64ChipType == MACH64_LG_ID) {
++ 	 regw(LCD_GEN_CTRL, lcd_gen_ctrl);
++       } else {
++ 	 outb(ioLCD_INDEX, LCD_GEN_CNTL);
++ 	 outl(ioLCD_DATA, lcd_gen_ctrl);
++       }
++ 
++       for (i=0; i<25; i++) {
++ 	 outb(vgaIOBase + 4, i);
++ 	 save->shadow_crtc[i] = inb(vgaIOBase + 5);
++       }
++       /* Unlock shadow VGA CRTC */
++       outw(vgaIOBase + 4, ((save->shadow_crtc[17] & 0x7F) << 8) | 17);
++ 
++       if (mach64ChipType == MACH64_LG_ID) {
++ 	 regw(LCD_GEN_CTRL, saved_lcd_gen_ctrl);
++       } else {
++ 	 outb(ioLCD_INDEX, LCD_GEN_CNTL);
++ 	 outl(ioLCD_DATA, saved_lcd_gen_ctrl);
++       }
++    }
+  
+     if (!mach64IntegratedController) {
+       save->ATIReg0  = inATI(0xb0);
+***************
+*** 155,163 ****
+  
+  void mach64RestoreVGAInfo()
+  {
+!    /* This routine is mostly from ATIRestore() in
+!     * xf86/vga256/drivers/ati/driver.c
+!     */
+  
+     if (!mach64IntegratedController) {
+       /* Unlock ATI specials */
+--- 195,202 ----
+  
+  void mach64RestoreVGAInfo()
+  {
+!    unsigned long saved_lcd_gen_ctrl = 0, lcd_gen_ctrl = 0;
+!    int i;
+  
+     if (!mach64IntegratedController) {
+       /* Unlock ATI specials */
+***************
+*** 182,191 ****
+--- 221,265 ----
+       outw(ATIExtReg, (save->ATIReg8 << 8) | 0xb8);
+     }
+  
++    if (mach64LCDPanelID >= 0) {
++       if (mach64ChipType == MACH64_LG_ID) {
++ 	 saved_lcd_gen_ctrl = regr(LCD_GEN_CTRL);
++ 	 lcd_gen_ctrl = saved_lcd_gen_ctrl &
++ 	    ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++ 	 regw(LCD_GEN_CTRL, lcd_gen_ctrl);
++       } else {
++ 	 outb(ioLCD_INDEX, LCD_GEN_CNTL);
++ 	 saved_lcd_gen_ctrl = inl(ioLCD_DATA);
++ 	 lcd_gen_ctrl = saved_lcd_gen_ctrl &
++ 	    ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++ 	 outl(ioLCD_DATA, lcd_gen_ctrl);
++       }
++    }
++ 
+     /*
+      * Restore the generic vga registers
+      */
+     vgaHWRestore((vgaHWPtr)save);
++ 
++    if (mach64LCDPanelID >= 0) {
++       lcd_gen_ctrl |= SHADOW_EN | SHADOW_RW_EN;
++       if (mach64ChipType == MACH64_LG_ID) {
++ 	 regw(LCD_GEN_CTRL, lcd_gen_ctrl);
++       } else {
++ 	 outb(ioLCD_INDEX, LCD_GEN_CNTL);
++ 	 outl(ioLCD_DATA, lcd_gen_ctrl);
++       }
++ 
++       outw(vgaIOBase + 4, ((save->shadow_crtc[17] & 0x7F) << 8) | 17);
++       for (i=0; i<25; i++) outw(vgaIOBase + 4, (save->shadow_crtc[i] << 8) | i);
++ 
++       if (mach64ChipType == MACH64_LG_ID) {
++ 	 regw(LCD_GEN_CTRL, saved_lcd_gen_ctrl);
++       } else {
++ 	 outb(ioLCD_INDEX, LCD_GEN_CNTL);
++ 	 outl(ioLCD_DATA, saved_lcd_gen_ctrl);
++       }
++    }
+  }
+  
+  /*
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.c devel/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.c
+*** base/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.c	Wed Feb  9 20:05:49 2000
+--- devel/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.c	Mon Feb 14 09:27:30 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.c,v 3.62.2.20 1999/10/12 17:18:42 hohndel Exp $ */
+  /*
+   * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
+   * Copyright 1993,1994,1995,1996,1997 by Kevin E. Martin, Chapel Hill, North Carolina.
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.c,v 3.62.2.20tsi Exp $ */
+  /*
+   * Copyright 1990,91 by Thomas Roell, Dinkelscherben, Germany.
+   * Copyright 1993,1994,1995,1996,1997 by Kevin E. Martin, Chapel Hill, North Carolina.
+***************
+*** 417,422 ****
+--- 417,423 ----
+  int	mach64MemClk;
+  int	mach64DRAMMemClk;
+  int	mach64VRAMMemClk;
++ int	mach64XCLK;
+  int	mach64MemCycle;
+  Bool	mach64IntegratedController;
+  Bool	mach64HasDSP;
+***************
+*** 1540,1545 ****
+--- 1541,1565 ----
+  	mach64CXClk = 7;  /* Use IBM RGB514 PLL */
+      else
+  	mach64CXClk = info->CXClk;
++     if (mach64HasDSP) {
++ 	/* Calculate XCLK */
++ 	outb(ioCLOCK_CNTL + 1, MCLK_FB_DIV << 2);
++ 	mach64XCLK =
++ 	    inb(ioCLOCK_CNTL + 2) * 4 * mach64RefFreq / mach64RefDivider;
++ 	outb(ioCLOCK_CNTL + 1, PLL_XCLK_CNTL << 2);
++ 	i = inb(ioCLOCK_CNTL + 2);
++ 	if (!(i & MFB_TIMES_4_2))
++ 	    mach64XCLK >>= 1;
++ 	i = i & XCLK_SRC_SEL;
++ 	switch (i) {
++ 	case 0:					      break;
++ 	case 1:  case 2:  case 3:  mach64XCLK >>= i;  break;
++ 	case 4:			   mach64XCLK /= 3;   break;
++ 	default:
++ 	    ErrorF("Unsupported XCLK source:  %d!\n", i);
++ 	    return FALSE;
++ 	}
++     }
+  
+  #ifdef DEBUG
+      ErrorF("MinFreq = %d, MaxFreq = %d, RefFreq = %d, RefDivider = %d\n",
+***************
+*** 1561,1567 ****
+  
+  	mach64LCDHorizontal = info->LCDHorizontal;
+  	mach64LCDVertical = info->LCDVertical;
+! 	mach64LCDClock = mach64GetCTClock(0);
+  	ErrorF("%s %s: %dx%d panel (ID %d) detected;  clock %.2f MHz\n",
+  		XCONFIG_PROBED, mach64InfoRec.name,
+  		mach64LCDHorizontal, mach64LCDVertical, mach64LCDPanelID,
+--- 1581,1587 ----
+  
+  	mach64LCDHorizontal = info->LCDHorizontal;
+  	mach64LCDVertical = info->LCDVertical;
+! 	mach64LCDClock = mach64GetCTClock((inb(0x3cc) >> 2) & 3);
+  	ErrorF("%s %s: %dx%d panel (ID %d) detected;  clock %.2f MHz\n",
+  		XCONFIG_PROBED, mach64InfoRec.name,
+  		mach64LCDHorizontal, mach64LCDVertical, mach64LCDPanelID,
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.h devel/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.h
+*** base/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.h	Wed Feb  9 20:05:49 2000
+--- devel/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.h	Mon Feb 14 08:52:16 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.h,v 3.14.2.6 1999/07/23 13:22:36 hohndel Exp $ */
+  /*
+   * Copyright 1992,1993,1994,1995,1996,1997 by Kevin E. Martin, Chapel Hill, North Carolina.
+   *
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/mach64.h,v 3.14.2.6tsi Exp $ */
+  /*
+   * Copyright 1992,1993,1994,1995,1996,1997 by Kevin E. Martin, Chapel Hill, North Carolina.
+   *
+***************
+*** 29,35 ****
+  #ifndef MACH64_H
+  #define MACH64_H
+  
+! #define MACH64_PATCHLEVEL "0"
+  
+  #define MACH64_CURSBYTES	1024
+  #define MACH64_CURSMAX		64
+--- 29,35 ----
+  #ifndef MACH64_H
+  #define MACH64_H
+  
+! #define MACH64_PATCHLEVEL "1"
+  
+  #define MACH64_CURSBYTES	1024
+  #define MACH64_CURSMAX		64
+***************
+*** 85,90 ****
+--- 85,91 ----
+  extern int mach64MemClk;
+  extern int mach64DRAMMemClk;
+  extern int mach64VRAMMemClk;
++ extern int mach64XCLK;
+  extern int mach64MemCycle;
+  
+  extern int mach64LCDPanelID;
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64init.c devel/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64init.c
+*** base/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64init.c	Wed Feb  9 20:05:53 2000
+--- devel/xc/programs/Xserver/hw/xfree86/accel/mach64/mach64init.c	Mon Feb 14 09:25:05 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/mach64init.c,v 3.24.2.11 1999/10/12 17:18:43 hohndel Exp $ */
+  /*
+   * Written by Jake Richter
+   * Copyright (c) 1989, 1990 Panacea Inc., Londonderry, NH - All Rights Reserved
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/mach64init.c,v 3.24.2.11tsi Exp $ */
+  /*
+   * Written by Jake Richter
+   * Copyright (c) 1989, 1990 Panacea Inc., Londonderry, NH - All Rights Reserved
+***************
+*** 1120,1126 ****
+      default:                   bpp =  4; break;
+      }
+  
+!     x = ((double)mach64VRAMMemClk * 64.0) / (current_dot_clock * (double)bpp);
+      if (mach64LCDPanelID >= 0)	/* Compensate for horizontal stretching */
+  	x *= (double)mach64LCDHorizontal / (double)current_hdisplay;
+      bx = ceil(log(floor(x))/log(2));
+--- 1120,1126 ----
+      default:                   bpp =  4; break;
+      }
+  
+!     x = ((double)mach64XCLK * 64.0) / (current_dot_clock * (double)bpp);
+      if (mach64LCDPanelID >= 0)	/* Compensate for horizontal stretching */
+  	x *= (double)mach64LCDHorizontal / (double)current_hdisplay;
+      bx = ceil(log(floor(x))/log(2));
+***************
+*** 1275,1281 ****
+      ErrorF("dsp_on  = %d, ron  = %d, rloop = %d\n", dsp_on, ron, rloop);
+      ErrorF("dsp_off = %d, roff = %d\n", dsp_off, roff);
+      ErrorF("dsp_xclks_per_qw = %d\n", dsp_xclks_per_qw);
+!     ErrorF("mach64VRAMMemClk = %d, ", mach64VRAMMemClk);
+      ErrorF("dot_clock = %.3lf, ", current_dot_clock);
+      ErrorF("bpp = %d\n", bpp);
+      ErrorF("trp = %d, ", trp);
+--- 1275,1281 ----
+      ErrorF("dsp_on  = %d, ron  = %d, rloop = %d\n", dsp_on, ron, rloop);
+      ErrorF("dsp_off = %d, roff = %d\n", dsp_off, roff);
+      ErrorF("dsp_xclks_per_qw = %d\n", dsp_xclks_per_qw);
+!     ErrorF("mach64XCLK = %d, ", mach64XCLK);
+      ErrorF("dot_clock = %.3lf, ", current_dot_clock);
+      ErrorF("bpp = %d\n", bpp);
+      ErrorF("trp = %d, ", trp);
+***************
+*** 2899,2906 ****
+  		outl(ioLCD_DATA, old_POWER_MANAGEMENT);
+  		if ((mach64ChipType != MACH64_LB_ID) &&
+  		    (mach64ChipType != MACH64_LD_ID) &&
+! 		    (mach64ChipType != MACH64_LR_ID) &&
+! 		    (mach64ChipType != MACH64_LS_ID)) {
+  		    outb(ioLCD_INDEX, LCD_POWER_MANAGEMENT_2);
+  		    outl(ioLCD_DATA, old_POWER_MANAGEMENT_2);
+  		}
+--- 2899,2906 ----
+  		outl(ioLCD_DATA, old_POWER_MANAGEMENT);
+  		if ((mach64ChipType != MACH64_LB_ID) &&
+  		    (mach64ChipType != MACH64_LD_ID) &&
+! 		    (mach64ChipType != MACH64_LI_ID) &&
+! 		    (mach64ChipType != MACH64_LP_ID)) {
+  		    outb(ioLCD_INDEX, LCD_POWER_MANAGEMENT_2);
+  		    outl(ioLCD_DATA, old_POWER_MANAGEMENT_2);
+  		}
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/accel/mach64/regmach64.h devel/xc/programs/Xserver/hw/xfree86/accel/mach64/regmach64.h
+*** base/xc/programs/Xserver/hw/xfree86/accel/mach64/regmach64.h	Wed Feb  9 20:05:54 2000
+--- devel/xc/programs/Xserver/hw/xfree86/accel/mach64/regmach64.h	Mon Feb 14 09:16:35 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/regmach64.h,v 3.15.2.8 1999/10/12 17:18:44 hohndel Exp $ */
+  /*
+   * Copyright 1992,1993,1994,1995,1996,1997 by Kevin E. Martin, Chapel Hill, North Carolina.
+   *
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/accel/mach64/regmach64.h,v 3.15.2.8tsi Exp $ */
+  /*
+   * Copyright 1992,1993,1994,1995,1996,1997 by Kevin E. Martin, Chapel Hill, North Carolina.
+   *
+***************
+*** 353,358 ****
+--- 353,360 ----
+  #define VCLK1_POST		0x0C
+  #define VCLK2_POST		0x30
+  #define VCLK3_POST		0xC0
++ #define XCLK_SRC_SEL		0x07
++ #define MFB_TIMES_4_2		0x08
+  
+  /* LCD_INDEX register mapping */
+  #define LCD_REG_INDEX		0x0000000f
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticlock.c devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticlock.c
+*** base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticlock.c	Wed Feb  9 20:09:29 2000
+--- devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticlock.c	Wed Feb  2 09:56:02 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticlock.c,v 1.1.2.3 1999/10/12 17:18:52 hohndel Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticlock.c,v 1.1.2.3tsi Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+***************
+*** 534,539 ****
+--- 534,544 ----
+      for (;  Clock_Line[++Clock_Chip_Index];  )
+      {
+          int Maximum_Gap = 0, Clock_Count = 0, Clock_Index = 0;
++ 
++         /* Only Mach64's and Rage128's can have programmable clocks */
++         if ((Clock_Chip_Index >= ATI_CLOCK_MACH64A) &&
++             (ATIAdapter < ATI_ADAPTER_MACH64))
++             break;
+  
+          for (;  Clock_Index < Number_Of_Clocks;  Clock_Index++)
+          {
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticonsole.c devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticonsole.c
+*** base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticonsole.c	Wed Feb  9 20:09:29 2000
+--- devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticonsole.c	Wed Feb  2 19:20:42 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticonsole.c,v 1.1.2.2 1999/10/12 17:18:52 hohndel Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/aticonsole.c,v 1.1.2.2tsi Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+***************
+*** 54,60 ****
+          saved_crtc_int_cntl, saved_lcd_index;
+  
+      static Bool entered = LEAVE;
+!     CARD32 tmp;
+  
+  #   ifdef XFreeXDGA
+          if ((enter == LEAVE) && !ATIUsing1bppModes &&
+--- 54,60 ----
+          saved_crtc_int_cntl, saved_lcd_index;
+  
+      static Bool entered = LEAVE;
+!     CARD32 tmp, lcd_gen_ctrl = 0, saved_lcd_gen_ctrl = 0;
+  
+  #   ifdef XFreeXDGA
+          if ((enter == LEAVE) && !ATIUsing1bppModes &&
+***************
+*** 139,149 ****
+              outl(ATIIOPortCRTC_GEN_CNTL, tmp | CRTC_EN);
+              outl(ATIIOPortCRTC_GEN_CNTL, tmp);
+              outl(ATIIOPortCRTC_GEN_CNTL, tmp | CRTC_EN);
+!             if (ATIChip >= ATI_CHIP_264XL)
+              {
+                  saved_lcd_index = inl(ATIIOPortLCD_INDEX);
+!                 outl(ATIIOPortLCD_INDEX,
+!                     saved_lcd_index & ~(LCD_MONDET_INT_EN | LCD_MONDET_INT));
+              }
+  
+              /* Ensure VGA aperture is enabled */
+--- 139,150 ----
+              outl(ATIIOPortCRTC_GEN_CNTL, tmp | CRTC_EN);
+              outl(ATIIOPortCRTC_GEN_CNTL, tmp);
+              outl(ATIIOPortCRTC_GEN_CNTL, tmp | CRTC_EN);
+!             if (ATILCDPanelID >= 0)
+              {
+                  saved_lcd_index = inl(ATIIOPortLCD_INDEX);
+!                 if (ATIChip >= ATI_CHIP_264XL)
+!                     outl(ATIIOPortLCD_INDEX, saved_lcd_index &
+!                         ~(LCD_MONDET_INT_EN | LCD_MONDET_INT));
+              }
+  
+              /* Ensure VGA aperture is enabled */
+***************
+*** 191,196 ****
+--- 192,222 ----
+                  }
+              }
+  
++             if (ATILCDPanelID >= 0)
++             {
++                 if (ATIChip == ATI_CHIP_264LT)
++                 {
++                     saved_lcd_gen_ctrl = inl(ATIIOPortLCD_GEN_CTRL);
++ 
++                     /* Setup to unlock non-shadow registers */
++                     lcd_gen_ctrl = saved_lcd_gen_ctrl &
++                         ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++                     outl(ATIIOPortLCD_GEN_CTRL, lcd_gen_ctrl);
++                 }
++                 else /* if ((ATIChip == ATI_CHIP_264LTPRO) ||
++                             (ATIChip == ATI_CHIP_264XL) ||
++                             (ATIChip == ATI_CHIP_MOBILITY)) */
++                 {
++                     saved_lcd_gen_ctrl = ATIGetLTProLCDReg(LCD_GEN_CNTL);
++ 
++                     /* Setup to unlock shadow registers */
++                     lcd_gen_ctrl = saved_lcd_gen_ctrl &
++                         ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++                     ATIPutLTProLCDReg(LCD_GEN_CNTL, lcd_gen_ctrl);
++                 }
++             }
++ 
++         UnlockShadowVGA:
+              ATISetVGAIOBase(inb(R_GENMO));
+  
+              /*
+***************
+*** 241,258 ****
+--- 267,371 ----
+                      VSyncEnd = VBlankEnd - 1;
+                  PutReg(CRTX(vgaIOBase), 0x11U, (VSyncEnd & 0x0FU) | 0x20U);
+              }
++ 
++             if (ATILCDPanelID >= 0)
++             {
++                 Bool DoShadow = TRUE;
++ 
++                 lcd_gen_ctrl ^= (SHADOW_EN | SHADOW_RW_EN);
++                 if (!(lcd_gen_ctrl & (SHADOW_EN | SHADOW_RW_EN)))
++                 {
++                     DoShadow = FALSE;
++                     lcd_gen_ctrl = saved_lcd_gen_ctrl;
++                 }
++ 
++                 /*
++                  * Setup to unlock shadow registers or restore previous
++                  * selection.
++                  */
++                 if (ATIChip == ATI_CHIP_264LT)
++                     outl(ATIIOPortLCD_GEN_CTRL, lcd_gen_ctrl);
++                 else /* if ((ATIChip == ATI_CHIP_264LTPRO) ||
++                             (ATIChip == ATI_CHIP_264XL) ||
++                             (ATIChip == ATI_CHIP_MOBILITY)) */
++                 {
++                     ATIPutLTProLCDReg(LCD_GEN_CNTL, lcd_gen_ctrl);
++ 
++                     /* Restore LCD index */
++                     outb(ATIIOPortLCD_INDEX, GetByte(saved_lcd_index, 0));
++                 }
++ 
++                 if (DoShadow)
++                     goto UnlockShadowVGA;       /* Unlock shadow registers */
++             }
+          }
+      }
+      else
+      {
+          if (ATIVGAAdapter != ATI_ADAPTER_NONE)
+          {
++             if (ATILCDPanelID >= 0)
++             {
++                 if (ATIChip == ATI_CHIP_264LT)
++                 {
++                     saved_lcd_gen_ctrl = inl(ATIIOPortLCD_GEN_CTRL);
++ 
++                     /* Setup to lock non-shadow registers */
++                     lcd_gen_ctrl = saved_lcd_gen_ctrl &
++                         ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++                     outl(ATIIOPortLCD_GEN_CTRL, lcd_gen_ctrl);
++                 }
++                 else /* if ((ATIChip == ATI_CHIP_264LTPRO) ||
++                             (ATIChip == ATI_CHIP_264XL) ||
++                             (ATIChip == ATI_CHIP_MOBILITY)) */
++                 {
++                     saved_lcd_gen_ctrl = ATIGetLTProLCDReg(LCD_GEN_CNTL);
++ 
++                     /* Setup to lock shadow registers */
++                     lcd_gen_ctrl = saved_lcd_gen_ctrl &
++                         ~(CRTC_RW_SELECT | SHADOW_EN | SHADOW_RW_EN);
++                     ATIPutLTProLCDReg(LCD_GEN_CNTL, lcd_gen_ctrl);
++                 }
++             }
++ 
++         LockShadowVGA:
+              ATISetVGAIOBase(inb(R_GENMO));
+  
+              /* Protect CRTC[0-7] */
+              tmp = GetReg(CRTX(vgaIOBase), 0x11U);
+              outb(CRTD(vgaIOBase), tmp | 0x80U);
+  
++             if (ATILCDPanelID >= 0)
++             {
++                 Bool DoShadow = TRUE;
++ 
++                 lcd_gen_ctrl ^= (SHADOW_EN | SHADOW_RW_EN);
++                 if (!(lcd_gen_ctrl & (SHADOW_EN | SHADOW_RW_EN)))
++                 {
++                     DoShadow = FALSE;
++                     lcd_gen_ctrl = saved_lcd_gen_ctrl;
++                 }
++ 
++                 /*
++                  * Setup to lock shadow registers or restore previous
++                  * selection.
++                  */
++                 if (ATIChip == ATI_CHIP_264LT)
++                     outl(ATIIOPortLCD_GEN_CTRL, lcd_gen_ctrl);
++                 else /* if ((ATIChip == ATI_CHIP_264LTPRO) ||
++                             (ATIChip == ATI_CHIP_264XL) ||
++                             (ATIChip == ATI_CHIP_MOBILITY)) */
++                 {
++                     ATIPutLTProLCDReg(LCD_GEN_CNTL, lcd_gen_ctrl);
++ 
++                     /* Restore LCD index */
++                     outb(ATIIOPortLCD_INDEX, GetByte(saved_lcd_index, 0));
++                 }
++ 
++                 if (DoShadow)
++                     goto LockShadowVGA;       /* Lock shadow registers */
++             }
++ 
+              if (ATIChipHasVGAWonder)
+              {
+                  /*
+***************
+*** 315,321 ****
+              outl(ATIIOPortDAC_CNTL, saved_dac_cntl);
+              if (ATIChip < ATI_CHIP_264CT)
+                  outl(ATIIOPortMEM_INFO, saved_mem_info);
+!             else if (ATIChip >= ATI_CHIP_264XL)
+                  outl(ATIIOPortLCD_INDEX, saved_lcd_index);
+          }
+  
+--- 428,434 ----
+              outl(ATIIOPortDAC_CNTL, saved_dac_cntl);
+              if (ATIChip < ATI_CHIP_264CT)
+                  outl(ATIIOPortMEM_INFO, saved_mem_info);
+!             else if (ATILCDPanelID >= 0)
+                  outl(ATIIOPortLCD_INDEX, saved_lcd_index);
+          }
+  
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/atiprobe.c devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/atiprobe.c
+*** base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/atiprobe.c	Wed Feb  9 20:09:32 2000
+--- devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/atiprobe.c	Tue Feb  1 10:27:18 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/atiprobe.c,v 1.1.2.8 1999/10/13 14:32:32 hohndel Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/atiprobe.c,v 1.1.2.8tsi Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+***************
+*** 1184,1200 ****
+                  ATILCDHorizontal = BIOSWord(LCDPanelInfo + 0x19U);
+                  ATILCDVertical = BIOSWord(LCDPanelInfo + 0x1BU);
+  
+!                 /* Assume clock 0 */
+!                 ATILCDClock = 2 * ATIGetMach64PLLReg(PLL_VCLK0_FB_DIV);
+                  ATILCDClock *= ATIReferenceNumerator;
+                  ATILCDClock /= ATIClockDescriptor->MinM;
+                  ATILCDClock /= ATIReferenceDenominator;
+!                 Index =
+!                     GetBits(ATIGetMach64PLLReg(PLL_XCLK_CNTL), PLL_VCLK0_XDIV);
+!                 Index *= MaxBits(PLL_VCLK0_POST_DIV) + 1;
+!                 Index |= GetBits(ATIGetMach64PLLReg(PLL_VCLK_POST_DIV),
+!                     PLL_VCLK0_POST_DIV);
+!                 ATILCDClock /= ATIClockDescriptor->PostDividers[Index];
+              }
+          }
+  
+--- 1184,1202 ----
+                  ATILCDHorizontal = BIOSWord(LCDPanelInfo + 0x19U);
+                  ATILCDVertical = BIOSWord(LCDPanelInfo + 0x1BU);
+  
+!                 /* Compute panel clock */
+!                 Index = GetBits(inb(R_GENMO), 0x0C);
+!                 ATILCDClock = 2 * ATIGetMach64PLLReg(PLL_VCLK0_FB_DIV + Index);
+                  ATILCDClock *= ATIReferenceNumerator;
+                  ATILCDClock /= ATIClockDescriptor->MinM;
+                  ATILCDClock /= ATIReferenceDenominator;
+!                 Index2 =
+!                     GetBits(ATIGetMach64PLLReg(PLL_XCLK_CNTL),
+!                         PLL_VCLK0_XDIV << Index);
+!                 Index2 *= MaxBits(PLL_VCLK0_POST_DIV) + 1;
+!                 Index2 |= GetBits(ATIGetMach64PLLReg(PLL_VCLK_POST_DIV),
+!                     PLL_VCLK0_POST_DIV << (2 * Index));
+!                 ATILCDClock /= ATIClockDescriptor->PostDividers[Index2];
+              }
+          }
+  
+diff -cENRr -x CVS -x test base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/ativersion.h devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/ativersion.h
+*** base/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/ativersion.h	Wed Feb  9 20:09:34 2000
+--- devel/xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/ativersion.h	Wed Feb  9 11:01:02 2000
+***************
+*** 1,4 ****
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/ativersion.h,v 1.1.2.5 1999/10/12 17:18:57 hohndel Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+--- 1,4 ----
+! /* $XFree86: xc/programs/Xserver/hw/xfree86/vga256/drivers/ati/ativersion.h,v 1.1.2.5tsi Exp $ */
+  /*
+   * Copyright 1997 through 1999 by Marc Aurele La France (TSI @ UQV), tsi@ualberta.ca
+   *
+***************
+*** 24,33 ****
+  #ifndef ___ATIVERSION_H___
+  #define ___ATIVERSION_H___ 1
+  
+! #define ATI_VERSION_NAME "4.6"
+  
+  #define ATI_VERSION_MAJOR 4
+! #define ATI_VERSION_MINOR 6
+  
+  #define ATI_VERSION_CURRENT ((ATI_VERSION_MAJOR << 16) | ATI_VERSION_MINOR)
+  
+--- 24,33 ----
+  #ifndef ___ATIVERSION_H___
+  #define ___ATIVERSION_H___ 1
+  
+! #define ATI_VERSION_NAME "4.7"
+  
+  #define ATI_VERSION_MAJOR 4
+! #define ATI_VERSION_MINOR 7
+  
+  #define ATI_VERSION_CURRENT ((ATI_VERSION_MAJOR << 16) | ATI_VERSION_MINOR)
+  

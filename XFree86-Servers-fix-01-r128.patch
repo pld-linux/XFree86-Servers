@@ -1,0 +1,68 @@
+
+7 February 2000
+
+This patch fixes a text corruption problem that shows up with the
+Rage 128 driver in 3.3.6.  To use this patch you need either the
+XFree86 source tree or the LinkKit.  This patch cannot be used to
+patch binaries directly.  Updated binaries for most platforms should
+be available soon.
+
+To apply the patch to the XFree86 source tree, go the directory containing
+the main "xc" directory, and run:
+
+  patch -p0 -E < this-file
+
+
+
+Index: xc/programs/Xserver/hw/xfree86/vga256/drivers/r128/r128_accel.c
+===================================================================
+RCS file: /home/x-cvs/xc/programs/Xserver/hw/xfree86/vga256/drivers/r128/Attic/r128_accel.c,v
+retrieving revision 1.1.2.3
+diff -u -r1.1.2.3 r128_accel.c
+--- r128_accel.c	1999/11/18 15:37:32	1.1.2.3
++++ xc/programs/Xserver/hw/xfree86/vga256/drivers/r128/r128_accel.c	2000/01/28 03:23:14
+@@ -179,7 +179,7 @@
+     R128InfoPtr   info      = R128PTR();
+     unsigned char *R128MMIO = info->MMIO;
+ 
+-    R128WaitForFifo(3);
++    R128WaitForFifo(4);
+     OUTREG(R128_DP_GUI_MASTER_CNTL, (info->dp_gui_master_cntl
+ 				     | R128_GMC_BRUSH_SOLID_COLOR
+ 				     | R128_GMC_SRC_DATATYPE_COLOR
+@@ -188,6 +188,8 @@
+ 				     | R128_AUX_CLIP_DIS));
+     OUTREG(R128_DP_BRUSH_FRGD_CLR,  color);
+     OUTREG(R128_DP_WRITE_MASK,      planemask);
++    OUTREG(R128_DP_CNTL,            (R128_DST_X_LEFT_TO_RIGHT
++				     | R128_DST_Y_TOP_TO_BOTTOM));
+ }
+ 
+ /* Subsequent XAA FillRectSolid. */
+@@ -364,6 +366,9 @@
+     OUTREG(R128_DST_Y_X,            ((info->scanline_y++ << 16)
+ 				     | info->scanline_x));
+     OUTREG(R128_DST_HEIGHT_WIDTH,   info->scanline_h_w);
++
++				/* Correct for new XAA offset calculation */
++    p += ((srcAddr/8-1)/4);
+ 
+ #if R128_FAST_COLOR_EXPAND
+     while (left) {
+Index: xc/programs/Xserver/hw/xfree86/vga256/vga/vga.h
+===================================================================
+RCS file: /home/x-cvs/xc/programs/Xserver/hw/xfree86/vga256/vga/Attic/vga.h,v
+retrieving revision 3.23.2.7
+diff -u -r3.23.2.7 vga.h
+--- vga.h	1998/07/30 06:24:18	3.23.2.7
++++ xc/programs/Xserver/hw/xfree86/vga256/vga/vga.h	2000/02/05 19:31:53
+@@ -30,7 +30,7 @@
+ 
+ #define VGA2_PATCHLEVEL "0"
+ #define VGA16_PATCHLEVEL "0"
+-#define SVGA_PATCHLEVEL "0"
++#define SVGA_PATCHLEVEL "1"
+ 
+ #include "X.h"
+ #include "misc.h"
+

@@ -1,0 +1,41 @@
+--- xc/config/cf/xf86site.def.jj	Mon Jun  5 16:19:15 2000
++++ xc/config/cf/xf86site.def	Mon Jun  5 16:23:40 2000
+@@ -246,15 +246,13 @@ XCOMM $XFree86: xc/config/cf/xf86site.de
+ 
+ /*
+  * To disable building the Xnest server, uncomment this.
+- *
+-#define XnestServer		NO
+  */
++#define XnestServer		NO
+ 
+ /*
+  * To disable building Xvfb, uncomment this.
+- *
+-#define XVirtualFramebufferServer	NO
+  */
++#define XVirtualFramebufferServer	NO
+ 
+ /*
+  * Set the default server (ie the one that gets the sym-link to "X")
+@@ -340,8 +338,8 @@ XCOMM $XFree86: xc/config/cf/xf86site.de
+  * fonts once, if this is a first time install you will want to build the
+  * fonts)
+  *
+- */
+ #define BuildFonts		YES
++ */
+ 
+ /*
+  * To not build/install the 75dpi fonts, uncomment the following
+@@ -382,9 +380,8 @@ XCOMM $XFree86: xc/config/cf/xf86site.de
+ /*
+  * To build only the servers with a cut-down source tree, uncomment
+  * this.
+- *
+-#define BuildServersOnly	YES
+  */
++#define BuildServersOnly	YES
+ 
+ /*
+  * To disable building XInput support, uncomment this

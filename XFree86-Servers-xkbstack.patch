@@ -1,0 +1,16 @@
+--- XFree86-3.3.6/xc/programs/Xserver/xkb/ddxLoad.c.xkbstack	Sun Sep 27 09:21:29 1998
++++ XFree86-3.3.6/xc/programs/Xserver/xkb/ddxLoad.c	Thu May 25 12:31:34 2000
+@@ -236,6 +236,13 @@
+ 	sprintf(keymap,"server-%s",display);
+     }
+     else {
++	if (strlen(names->keymap) > PATH_MAX - 1) {
++#ifdef DEBUG
++            ErrorF("name of keymap (%s) exceeds max length\n",
++							names->keymap);
++#endif
++	    return False;
++	}
+ 	strcpy(keymap,names->keymap);
+     }
+ 
