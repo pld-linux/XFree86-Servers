@@ -33,6 +33,7 @@ Patch20:	%{name}-alpha.patch
 Patch21:	%{name}-serversonly.patch
 Patch22:	%{name}-sparc-asmflags.patch
 Patch23:	%{name}-HasZlib.patch
+Patch24:	%{name}-period.patch
 ExclusiveArch:	%{ix86} alpha m68k armv4l sparc
 BuildRequires:	flex
 BuildRequires:	bison
@@ -478,6 +479,7 @@ patch -p0 -s -d xc/lib < xfsft-1.1.6/libfont.patch
 # fix cfb linking
 %patch22 -p1
 %patch23 -p1
+%patch24 -p1
 
 # Fix the header file for makedepend.
 cd xc/config/imake
