@@ -70,7 +70,7 @@ Please see the XFree86 video card/server list available from the
 XFree86 Project's website at http://www.xfree86.org/ for a definitive
 list of X servers and which video cards they support.
 
-%description -l pl common
+%description common -l pl
 Pliki wspólne dla wszystkich X serwerów, w tym modu³y, Xwrapper oraz
 pliki konfiguracyjne PAM. Zainstaluj ten pakiet wraz z pakietem
 zawieraj±cym odpowiedni X serwer je¿eli masz star± kartê, która by³a
@@ -96,7 +96,7 @@ motherboards with built-in graphics accelerators (such as the IBM
 ValuePoint line). Note that if you have an S3 ViRGE based video card,
 you'll need XFree86-S3V instead of XFree86-S3.
 
-%description -l pl -n XFree86-S3
+%description -n XFree86-S3 -l pl
 XFree86-S3 jest X serwerem dla kart graficznych na uk³adach S3, czyli
 czê¶ci kart Number Nine, Diamond Stealth, Orchid Fahrenheit, Miro
 Crystal, STB. Je¿eli masz kartê na uk³adzie S3 ViRGE, zamiast tego
@@ -113,7 +113,7 @@ Requires:	%{name}-common = %{version}
 XFree86-I128 is the X server for the Number Nine Imagine 128 and
 similar video cards.
 
-%description -l pl -n XFree86-I128
+%description -n XFree86-I128 -l pl
 XFree86-I128 jest X serwerem dla kart graficznych Number Nine Imagine
 128 i podobnych.
 
@@ -128,7 +128,7 @@ Requires:	%{name}-common = %{version}
 XFree86-S3V is the X server for video cards based on the S3 ViRGE
 chipset.
 
-%description -l pl -n XFree86-S3V
+%description -n XFree86-S3V -l pl
 XFree86-S3V jest X serwerem dla kart graficznych opartych o uk³ady S3
 ViRGE.
 
@@ -146,7 +146,7 @@ Note that this server is known to have problems with some Mach64
 cards. Check http://www.xfree86.org/ for current information on
 updating this server.
 
-%description -l pl -n XFree86-Mach64
+%description -n XFree86-Mach64 -l pl
 XFree86-Mach64 to X serwer dla kart opartych o uk³ad ATI Mach64,
 takich jak Graphics Xpression, GUP Turbo, WinTurbo. Uwaga: ten serwer
 miewa problemy z niektórymi kartami Mach64.
@@ -162,7 +162,7 @@ Requires:	%{name}-common = %{version}
 The XFree86-8514 package contains the X server for older IBM 8514
 video cards, or compatibles from a company such as ATI.
 
-%description -l pl -n XFree86-8514
+%description -n XFree86-8514 -l pl
 XFree86-8514 zawiera X serwer dla starszych kart graficznych IBM 8514
 lub kompatybilnych.
 
@@ -178,7 +178,7 @@ The XFree86-AGX package contains the X server for AGX-based cards,
 such as the Boca Vortex, Orchid Celsius, Spider Black Widow and
 Hercules Graphite.
 
-%description -l pl -n XFree86-AGX
+%description -n XFree86-AGX -l pl
 XFree86-AGX zawiera X serwer dla kart graficznych na uk³adzie AGX,
 takich jak Roca Vortex, Orchid Celsius, Spider Black Widow, Hercules
 Graphite.
@@ -195,7 +195,7 @@ XFree86-Mach32 is the X server package for video cards built around
 ATI's Mach32 chip, including the ATI Graphics Ultra Pro and Ultra
 Plus.
 
-%description -l pl -n XFree86-Mach32
+%description -n XFree86-Mach32 -l pl
 XFree86-Mach32 jest X serwerem dla kart graficznych opartych na
 uk³adzie ATI Mach32, w tym kart ATI Graphics Ultra Pro i Ultra Plus.
 
@@ -210,7 +210,7 @@ Requires:	%{name}-common = %{version}
 XFree86-Mach8 is the X server for video cards built around ATI's Mach8
 chip, including the ATI 8514 Ultra and Graphics Ultra.
 
-%description -l pl -n XFree86-Mach8
+%description -n XFree86-Mach8 -l pl
 XFree86-Mach8 jest X serwerem dla kart graficznych opartych na
 uk³adzie ATI Mach8, w tym kart ATI 8514 Ultra i Graphics Ultra.
 
@@ -226,7 +226,7 @@ XFree86-Mono is a generic monochrome (two color) server for VGA cards.
 XFree86-Mono will work for nearly all VGA compatible cards, but will
 only support a monochrome display.
 
-%description -l pl -n XFree86-Mono
+%description -n XFree86-Mono -l pl
 XFree86-Mono jest standardowym monochromatycznym (2-kolorowym)
 serwerem dla kart VGA. Dzia³a na prawie wszystkich kartach zgodnych z
 VGA.
@@ -243,7 +243,7 @@ XFree86-P9000 is the X server for video cards built around the Weitek
 P9000 chip, such as most Diamond Viper cards and the Orchid P9000
 card.
 
-%description -l pl -n XFree86-P9000
+%description -n XFree86-P9000 -l pl
 XFree86-P9000 jest X serwerem dla kart graficznych opartych na
 uk³adzie Weitek P9000, takich jak Diamon Viper i Orchid P9000.
 
@@ -263,7 +263,7 @@ Genoa 8500VL, most Actix boards, and the Spider VLB Plus. This X
 server works for many other chips and cards, so try this server if you
 are having problems.
 
-%description -l pl -n XFree86-SVGA
+%description -n XFree86-SVGA -l pl
 X serwer dla wiêkszo¶ci prostych kart SVGA, w tym kart zbudowanych na
 uk³adach ET4000, Cirrus Logic, Chips and Technologies, Trident 8900 i
 9000, Matrox. Dzia³a tak¿e na kartach Diamond Speedstar, Orchid
@@ -282,7 +282,7 @@ XFree86-VGA16 is a generic 16 color server for VGA boards.
 XFree86-VGA16 will work on nearly all VGA style graphics boards, but
 will only support a low resolution, 16 color display.
 
-%description -l pl -n XFree86-VGA16
+%description -n XFree86-VGA16 -l pl
 XFree86-VGA16 jest standardowych 16-kolorowym serwerem dla kart VGA.
 Dzia³a na prawie wszystkich kartach zgodnych z VGA.
 
@@ -299,7 +299,7 @@ including the Genoa 8900 Phantom 32i, the Hercules Dynamite, the
 LeadTek WinFast S200, the Sigma Concorde, the STB LightSpeed, the
 TechWorks Thunderbolt, and the ViewTop PCI.
 
-%description -l pl -n XFree86-W32
+%description -n XFree86-W32 -l pl
 XFree86-W32 jest X serwerem dla kart opartych na uk³adach ET4000/W32,
 w tym kart Genoa 8900 Phantom 32i, Hercules Dynamite, LeadTek WinFast
 S200, Sigma Concorde, STB LightSpeed, TechWorks Thunderbolt, ViewTop
@@ -318,7 +318,7 @@ Permedia chipsets, including the Glint 500TX with IBM RGB526 RAMDAC,
 the Glint MX with IBM RGB526 and IBM RGB640 RAMDAC, the Permedia with
 IBM RGB526 RAMDAC, and the Permedia 2 (classic, 2a, 2v).
 
-%description -l pl -n XFree86-3DLabs
+%description -n XFree86-3DLabs -l pl
 XFree86-3DLabs jest X serwerem dla kart graficznych na uk³adach 3Dlabs
 Glint lub Permedia, w tym Glint 500TX z RAMDAC IBM RGB526, Glint MX z
 RAMDAC IBM RGB526 lub IBM RGB640, Permedia z RAMDAC IBM RGB526 oraz
@@ -336,7 +336,7 @@ The XFree86-TGA package contains an 8-bit X server for Digital TGA
 boards based on the DC21040 chip. These adapters are often used in
 Alpha workstations and are included with Alpha UDB (Multia) machines.
 
-%description -l pl -n XFree86-TGA
+%description -n XFree86-TGA -l pl
 XFree86-TGA zawiea 8-bitowy X serwer dla kart Digital TGA opartych na
 uk³adzie DC21040. Te karty s± czêsto u¿ywane na w stacjach roboczych
 Alpha oraz maszynach Alpha UDB (Multia).
@@ -364,7 +364,7 @@ in sync with the projection system, but the FBDev X server will always
 work. Thirdly, this X server can produce a larger display, at a higher
 resolution, for consoles on laptops.
 
-%description -l pl -n XFree86-FBDev
+%description -n XFree86-FBDev -l pl
 XFree86-FBDev zawiera X serwer oparty o framebuffer. Zazwyczaj jest
 jedynym dla maszyn SPARC, ale ma te¿ mo¿liwo¶ci przydatne na
 platformach intelowskich, zw³aszcza w laptopach.
@@ -389,7 +389,7 @@ The XFree86-Sun package contains the X server for Sun computers with
 monochrome and 8-bit color SBUS frame buffers (for example, the CG3
 and CG6 frame buffers).
 
-%description -l pl -n XFree86-Sun
+%description -n XFree86-Sun -l pl
 XFree86-Sun zawiera X serwer dla komputerów Sun z framebufferem SBUS
 monochromatycznym lub z 8-bitowym kolorem (np. CG3 lub CG6).
 
@@ -405,7 +405,7 @@ Requires:	%{name}-common = %{version}
 The XFree86-SunMono package includes an X server for Sun computers
 with monochrome SBUS frame buffers only.
 
-%description -l pl -n XFree86-SunMono
+%description -n XFree86-SunMono -l pl
 XFree86-SunMono zawiera X serwer dla komputerów Sun z
 monochromatycznym framebufferem SBUS.
 
@@ -421,7 +421,7 @@ Requires:	%{name}-common = %{version}
 The XFree86-Sun24 package contains the X server for Sun computers with
 all supported SBUS frame buffers.
 
-%description -l pl -n XFree86-Sun24
+%description -n XFree86-Sun24 -l pl
 XFree86-Sun24 zawiera X serwer dla komputerów Sun z framebufferem
 SBUS.
 
