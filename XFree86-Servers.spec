@@ -50,13 +50,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 This package contains old XFree86 servers (taken from version 3.3.6)
 to use with old video cards, not supported by XFree86 4.x.
 
-%description -l pl
-Ten pakiet zawiera stare serwery XFree86 (wziÍte z wersji 3.3.6) dla
-starych kart graficznych, nie obs≥ugiwanych przez XFree86 4.x.
+%description -l pl.UTF-8
+Ten pakiet zawiera stare serwery XFree86 (wziƒôte z wersji 3.3.6) dla
+starych kart graficznych, nie obs≈Çugiwanych przez XFree86 4.x.
 
 %package common
 Summary:	The XFree86 servers - common files
-Summary(pl):	Pliki wspÛlne dla serwerÛw XFree86
+Summary(pl.UTF-8):   Pliki wsp√≥lne dla serwer√≥w XFree86
 Group:		X11/Servers
 Requires:	XFree86-fonts
 Obsoletes:	XFree86-Xserver
@@ -72,20 +72,20 @@ Please see the XFree86 video card/server list available from the
 XFree86 Project's website at http://www.xfree86.org/ for a definitive
 list of X servers and which video cards they support.
 
-%description common -l pl
-Pliki wspÛlne dla wszystkich X serwerÛw, w tym modu≥y, Xwrapper oraz
+%description common -l pl.UTF-8
+Pliki wsp√≥lne dla wszystkich X serwer√≥w, w tym modu≈Çy, Xwrapper oraz
 pliki konfiguracyjne PAM. Zainstaluj ten pakiet wraz z pakietem
-zawieraj±cym odpowiedni X serwer jeøeli masz star± kartÍ, ktÛra by≥a
-obs≥ugiwana przez XFree 3.3.6, a nie jest obs≥ugiwana przez XFree 4.x.
-Jeøeli twoja karta jest dobrze obs≥ugiwana przez XFree 4.x, lepiej
-uøyj X serwera wraz z odpowiednim driverem z XFree 4.x
+zawierajƒÖcym odpowiedni X serwer je≈ºeli masz starƒÖ kartƒô, kt√≥ra by≈Ça
+obs≈Çugiwana przez XFree 3.3.6, a nie jest obs≈Çugiwana przez XFree 4.x.
+Je≈ºeli twoja karta jest dobrze obs≈Çugiwana przez XFree 4.x, lepiej
+u≈ºyj X serwera wraz z odpowiednim driverem z XFree 4.x
 
-Pe≥n± listÍ X serwerÛw oraz kart ktÛre obs≥uguj± moøna znaleºÊ pod
+Pe≈ÇnƒÖ listƒô X serwer√≥w oraz kart kt√≥re obs≈ÇugujƒÖ mo≈ºna znale≈∫ƒá pod
 adresem http://www.xfree86.org/.
 
 %package -n XFree86-S3
 Summary:	The XFree86 server for video cards based on older S3 chips
-Summary(pl):	Serwer XFree86 dla kart na starych uk≥adach S3
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na starych uk≈Çadach S3
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -98,15 +98,15 @@ motherboards with built-in graphics accelerators (such as the IBM
 ValuePoint line). Note that if you have an S3 ViRGE based video card,
 you'll need XFree86-S3V instead of XFree86-S3.
 
-%description -n XFree86-S3 -l pl
-XFree86-S3 jest X serwerem dla kart graficznych na uk≥adach S3, czyli
-czÍ∂ci kart Number Nine, Diamond Stealth, Orchid Fahrenheit, Miro
-Crystal, STB. Jeøeli masz kartÍ na uk≥adzie S3 ViRGE, zamiast tego
+%description -n XFree86-S3 -l pl.UTF-8
+XFree86-S3 jest X serwerem dla kart graficznych na uk≈Çadach S3, czyli
+czƒô≈õci kart Number Nine, Diamond Stealth, Orchid Fahrenheit, Miro
+Crystal, STB. Je≈ºeli masz kartƒô na uk≈Çadzie S3 ViRGE, zamiast tego
 pakietu zainstaluj XFree86-S3V.
 
 %package -n XFree86-I128
 Summary:	The XFree86 server for Number Nine Imagine 128 video cards
-Summary(pl):	Serwer XFree86 dla kart Number Nine Imagine 128
+Summary(pl.UTF-8):   Serwer XFree86 dla kart Number Nine Imagine 128
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -115,13 +115,13 @@ Requires:	%{name}-common = %{version}
 XFree86-I128 is the X server for the Number Nine Imagine 128 and
 similar video cards.
 
-%description -n XFree86-I128 -l pl
+%description -n XFree86-I128 -l pl.UTF-8
 XFree86-I128 jest X serwerem dla kart graficznych Number Nine Imagine
 128 i podobnych.
 
 %package -n XFree86-S3V
 Summary:	The XFree86 server for video cards based on the S3 Virge chip
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie S3 Virge
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie S3 Virge
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -130,13 +130,13 @@ Requires:	%{name}-common = %{version}
 XFree86-S3V is the X server for video cards based on the S3 ViRGE
 chipset.
 
-%description -n XFree86-S3V -l pl
-XFree86-S3V jest X serwerem dla kart graficznych opartych o uk≥ady S3
+%description -n XFree86-S3V -l pl.UTF-8
+XFree86-S3V jest X serwerem dla kart graficznych opartych o uk≈Çady S3
 ViRGE.
 
 %package -n XFree86-Mach64
 Summary:	The XFree86 server for Mach64 based video cards
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie Mach64
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie Mach64
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -148,14 +148,14 @@ Note that this server is known to have problems with some Mach64
 cards. Check http://www.xfree86.org/ for current information on
 updating this server.
 
-%description -n XFree86-Mach64 -l pl
-XFree86-Mach64 to X serwer dla kart opartych o uk≥ad ATI Mach64,
+%description -n XFree86-Mach64 -l pl.UTF-8
+XFree86-Mach64 to X serwer dla kart opartych o uk≈Çad ATI Mach64,
 takich jak Graphics Xpression, GUP Turbo, WinTurbo. Uwaga: ten serwer
-miewa problemy z niektÛrymi kartami Mach64.
+miewa problemy z niekt√≥rymi kartami Mach64.
 
 %package -n XFree86-8514
 Summary:	The XFree86 server program for older IBM 8514 or compatible video cards
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie IBM 8514
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie IBM 8514
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -164,13 +164,13 @@ Requires:	%{name}-common = %{version}
 The XFree86-8514 package contains the X server for older IBM 8514
 video cards, or compatibles from a company such as ATI.
 
-%description -n XFree86-8514 -l pl
+%description -n XFree86-8514 -l pl.UTF-8
 XFree86-8514 zawiera X serwer dla starszych kart graficznych IBM 8514
 lub kompatybilnych.
 
 %package -n XFree86-AGX
 Summary:	The XFree86 server for AGX-based video cards
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie AGX
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie AGX
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -180,14 +180,14 @@ The XFree86-AGX package contains the X server for AGX-based cards,
 such as the Boca Vortex, Orchid Celsius, Spider Black Widow and
 Hercules Graphite.
 
-%description -n XFree86-AGX -l pl
-XFree86-AGX zawiera X serwer dla kart graficznych na uk≥adzie AGX,
+%description -n XFree86-AGX -l pl.UTF-8
+XFree86-AGX zawiera X serwer dla kart graficznych na uk≈Çadzie AGX,
 takich jak Roca Vortex, Orchid Celsius, Spider Black Widow, Hercules
 Graphite.
 
 %package -n XFree86-Mach32
 Summary:	The XFree86 server for Mach32 based video cards
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie Mach32
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie Mach32
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -197,13 +197,13 @@ XFree86-Mach32 is the X server package for video cards built around
 ATI's Mach32 chip, including the ATI Graphics Ultra Pro and Ultra
 Plus.
 
-%description -n XFree86-Mach32 -l pl
+%description -n XFree86-Mach32 -l pl.UTF-8
 XFree86-Mach32 jest X serwerem dla kart graficznych opartych na
-uk≥adzie ATI Mach32, w tym kart ATI Graphics Ultra Pro i Ultra Plus.
+uk≈Çadzie ATI Mach32, w tym kart ATI Graphics Ultra Pro i Ultra Plus.
 
 %package -n XFree86-Mach8
 Summary:	The XFree86 server for Mach8 video cards
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie Mach8
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie Mach8
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -212,13 +212,13 @@ Requires:	%{name}-common = %{version}
 XFree86-Mach8 is the X server for video cards built around ATI's Mach8
 chip, including the ATI 8514 Ultra and Graphics Ultra.
 
-%description -n XFree86-Mach8 -l pl
+%description -n XFree86-Mach8 -l pl.UTF-8
 XFree86-Mach8 jest X serwerem dla kart graficznych opartych na
-uk≥adzie ATI Mach8, w tym kart ATI 8514 Ultra i Graphics Ultra.
+uk≈Çadzie ATI Mach8, w tym kart ATI 8514 Ultra i Graphics Ultra.
 
 %package -n XFree86-Mono
 Summary:	A generic XFree86 monochrome server for VGA cards
-Summary(pl):	Serwer XFree86 dla kart VGA w trybie mono
+Summary(pl.UTF-8):   Serwer XFree86 dla kart VGA w trybie mono
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -228,14 +228,14 @@ XFree86-Mono is a generic monochrome (two color) server for VGA cards.
 XFree86-Mono will work for nearly all VGA compatible cards, but will
 only support a monochrome display.
 
-%description -n XFree86-Mono -l pl
+%description -n XFree86-Mono -l pl.UTF-8
 XFree86-Mono jest standardowym monochromatycznym (2-kolorowym)
-serwerem dla kart VGA. Dzia≥a na prawie wszystkich kartach zgodnych z
+serwerem dla kart VGA. Dzia≈Ça na prawie wszystkich kartach zgodnych z
 VGA.
 
 %package -n XFree86-P9000
 Summary:	The XFree86 server for P9000 cards
-Summary(pl):	Serwer dla kart na uk≥adzie P9000
+Summary(pl.UTF-8):   Serwer dla kart na uk≈Çadzie P9000
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -245,13 +245,13 @@ XFree86-P9000 is the X server for video cards built around the Weitek
 P9000 chip, such as most Diamond Viper cards and the Orchid P9000
 card.
 
-%description -n XFree86-P9000 -l pl
+%description -n XFree86-P9000 -l pl.UTF-8
 XFree86-P9000 jest X serwerem dla kart graficznych opartych na
-uk≥adzie Weitek P9000, takich jak Diamon Viper i Orchid P9000.
+uk≈Çadzie Weitek P9000, takich jak Diamon Viper i Orchid P9000.
 
 %package -n XFree86-SVGA
 Summary:	An XFree86 server for most simple framebuffer SVGA devices
-Summary(pl):	Serwer dla wiÍkszo∂ci prostych kart SVGA
+Summary(pl.UTF-8):   Serwer dla wiƒôkszo≈õci prostych kart SVGA
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -265,16 +265,16 @@ Genoa 8500VL, most Actix boards, and the Spider VLB Plus. This X
 server works for many other chips and cards, so try this server if you
 are having problems.
 
-%description -n XFree86-SVGA -l pl
-X serwer dla wiÍkszo∂ci prostych kart SVGA, w tym kart zbudowanych na
-uk≥adach ET4000, Cirrus Logic, Chips and Technologies, Trident 8900 i
-9000, Matrox. Dzia≥a takøe na kartach Diamond Speedstar, Orchid
+%description -n XFree86-SVGA -l pl.UTF-8
+X serwer dla wiƒôkszo≈õci prostych kart SVGA, w tym kart zbudowanych na
+uk≈Çadach ET4000, Cirrus Logic, Chips and Technologies, Trident 8900 i
+9000, Matrox. Dzia≈Ça tak≈ºe na kartach Diamond Speedstar, Orchid
 Kelvin, STB Nitro i Horizon, Genoa 8500VL, Spider VLB Plus i
-wiÍkszo∂ci kart Actix.
+wiƒôkszo≈õci kart Actix.
 
 %package -n XFree86-VGA16
 Summary:	A generic XFree86 server for VGA16 boards
-Summary(pl):	Serwer XFree86 dla kart VGA w trybie 4bpp
+Summary(pl.UTF-8):   Serwer XFree86 dla kart VGA w trybie 4bpp
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -284,13 +284,13 @@ XFree86-VGA16 is a generic 16 color server for VGA boards.
 XFree86-VGA16 will work on nearly all VGA style graphics boards, but
 will only support a low resolution, 16 color display.
 
-%description -n XFree86-VGA16 -l pl
+%description -n XFree86-VGA16 -l pl.UTF-8
 XFree86-VGA16 jest standardowych 16-kolorowym serwerem dla kart VGA.
-Dzia≥a na prawie wszystkich kartach zgodnych z VGA.
+Dzia≈Ça na prawie wszystkich kartach zgodnych z VGA.
 
 %package -n XFree86-W32
 Summary:	The XFree86 server for video cards based on ET4000/W32 chips
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie ET4000/W32
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie ET4000/W32
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -301,15 +301,15 @@ including the Genoa 8900 Phantom 32i, the Hercules Dynamite, the
 LeadTek WinFast S200, the Sigma Concorde, the STB LightSpeed, the
 TechWorks Thunderbolt, and the ViewTop PCI.
 
-%description -n XFree86-W32 -l pl
-XFree86-W32 jest X serwerem dla kart opartych na uk≥adach ET4000/W32,
+%description -n XFree86-W32 -l pl.UTF-8
+XFree86-W32 jest X serwerem dla kart opartych na uk≈Çadach ET4000/W32,
 w tym kart Genoa 8900 Phantom 32i, Hercules Dynamite, LeadTek WinFast
 S200, Sigma Concorde, STB LightSpeed, TechWorks Thunderbolt, ViewTop
 PCI.
 
 %package -n XFree86-3DLabs
 Summary:	The XFree86 server for 3Dlabs video cards
-Summary(pl):	Serwer XFree86 dla kart na uk≥adzie 3Dlabs
+Summary(pl.UTF-8):   Serwer XFree86 dla kart na uk≈Çadzie 3Dlabs
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -320,15 +320,15 @@ Permedia chipsets, including the Glint 500TX with IBM RGB526 RAMDAC,
 the Glint MX with IBM RGB526 and IBM RGB640 RAMDAC, the Permedia with
 IBM RGB526 RAMDAC, and the Permedia 2 (classic, 2a, 2v).
 
-%description -n XFree86-3DLabs -l pl
-XFree86-3DLabs jest X serwerem dla kart graficznych na uk≥adach 3Dlabs
+%description -n XFree86-3DLabs -l pl.UTF-8
+XFree86-3DLabs jest X serwerem dla kart graficznych na uk≈Çadach 3Dlabs
 Glint lub Permedia, w tym Glint 500TX z RAMDAC IBM RGB526, Glint MX z
 RAMDAC IBM RGB526 lub IBM RGB640, Permedia z RAMDAC IBM RGB526 oraz
 Permedia 2 (classic, 2a, 2v).
 
 %package -n XFree86-TGA
 Summary:	X server for systems with Digital TGA boards based on DC21040 chips
-Summary(pl):	X serwer dla systemÛw z kartami Digital TGA na uk≥adach DC21040
+Summary(pl.UTF-8):   X serwer dla system√≥w z kartami Digital TGA na uk≈Çadach DC21040
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -338,14 +338,14 @@ The XFree86-TGA package contains an 8-bit X server for Digital TGA
 boards based on the DC21040 chip. These adapters are often used in
 Alpha workstations and are included with Alpha UDB (Multia) machines.
 
-%description -n XFree86-TGA -l pl
+%description -n XFree86-TGA -l pl.UTF-8
 XFree86-TGA zawiea 8-bitowy X serwer dla kart Digital TGA opartych na
-uk≥adzie DC21040. Te karty s± czÍsto uøywane na w stacjach roboczych
+uk≈Çadzie DC21040. Te karty sƒÖ czƒôsto u≈ºywane na w stacjach roboczych
 Alpha oraz maszynach Alpha UDB (Multia).
 
 %package -n XFree86-FBDev
 Summary:	The X server for the generic frame buffer device on some machines
-Summary(pl):	X serwer dzia≥aj±cy w oparciu o framebuffer
+Summary(pl.UTF-8):   X serwer dzia≈ÇajƒÖcy w oparciu o framebuffer
 Group:		X11/Servers
 Provides:	Xserver
 Requires:	%{name}-common = %{version}
@@ -366,21 +366,21 @@ in sync with the projection system, but the FBDev X server will always
 work. Thirdly, this X server can produce a larger display, at a higher
 resolution, for consoles on laptops.
 
-%description -n XFree86-FBDev -l pl
+%description -n XFree86-FBDev -l pl.UTF-8
 XFree86-FBDev zawiera X serwer oparty o framebuffer. Zazwyczaj jest
-jedynym dla maszyn SPARC, ale ma teø moøliwo∂ci przydatne na
-platformach intelowskich, zw≥aszcza w laptopach.
+jedynym dla maszyn SPARC, ale ma te≈º mo≈ºliwo≈õci przydatne na
+platformach intelowskich, zw≈Çaszcza w laptopach.
 
-Po pierwsze, ten X serwer moøe byÊ uøywany dla kart, ktÛre nie maj±
-jeszcze dedykowanego drivera (uwaga: ten serwer dzia≥a bez
-akceleracji). Po drugie, ten X serwer obs≥uguje protoko≥y VESA, wiÍc
-moøe dostosowaÊ parametry wy∂wietlania do urz±dzenia, co jest
-przydatne przy projekcjach. Po trzecie, ten X serwer moøe wy∂wietlaÊ
-wiÍkszy obraz, z wiÍksz± rozdzielczo∂ci± na laptopach.
+Po pierwsze, ten X serwer mo≈ºe byƒá u≈ºywany dla kart, kt√≥re nie majƒÖ
+jeszcze dedykowanego drivera (uwaga: ten serwer dzia≈Ça bez
+akceleracji). Po drugie, ten X serwer obs≈Çuguje protoko≈Çy VESA, wiƒôc
+mo≈ºe dostosowaƒá parametry wy≈õwietlania do urzƒÖdzenia, co jest
+przydatne przy projekcjach. Po trzecie, ten X serwer mo≈ºe wy≈õwietlaƒá
+wiƒôkszy obraz, z wiƒôkszƒÖ rozdzielczo≈õciƒÖ na laptopach.
 
 %package -n XFree86-Sun
 Summary:	X server for Suns with monochrome and 8-bit color SBUS framebuffers
-Summary(pl):	X serwer dla SunÛw z framebufferem SBUS mono lub kolorowym 8bpp
+Summary(pl.UTF-8):   X serwer dla Sun√≥w z framebufferem SBUS mono lub kolorowym 8bpp
 Group:		X11/Servers
 Obsoletes:	X11R6.1-Sun
 Provides:	Xserver
@@ -391,13 +391,13 @@ The XFree86-Sun package contains the X server for Sun computers with
 monochrome and 8-bit color SBUS frame buffers (for example, the CG3
 and CG6 frame buffers).
 
-%description -n XFree86-Sun -l pl
-XFree86-Sun zawiera X serwer dla komputerÛw Sun z framebufferem SBUS
+%description -n XFree86-Sun -l pl.UTF-8
+XFree86-Sun zawiera X serwer dla komputer√≥w Sun z framebufferem SBUS
 monochromatycznym lub z 8-bitowym kolorem (np. CG3 lub CG6).
 
 %package -n XFree86-SunMono
 Summary:	X server for Sun computers with monochrome SBUS framebuffers only
-Summary(pl):	X serwer dla SunÛw z monochromatycznym framebufferem SBUS
+Summary(pl.UTF-8):   X serwer dla Sun√≥w z monochromatycznym framebufferem SBUS
 Group:		X11/Servers
 Obsoletes:	X11R6.1-SunMono
 Provides:	Xserver
@@ -407,13 +407,13 @@ Requires:	%{name}-common = %{version}
 The XFree86-SunMono package includes an X server for Sun computers
 with monochrome SBUS frame buffers only.
 
-%description -n XFree86-SunMono -l pl
-XFree86-SunMono zawiera X serwer dla komputerÛw Sun z
+%description -n XFree86-SunMono -l pl.UTF-8
+XFree86-SunMono zawiera X serwer dla komputer√≥w Sun z
 monochromatycznym framebufferem SBUS.
 
 %package -n XFree86-Sun24
 Summary:	The X server for Suns with all supported SBUS framebuffers
-Summary(pl):	X serwer dla SunÛw z framebufferami SBUS
+Summary(pl.UTF-8):   X serwer dla Sun√≥w z framebufferami SBUS
 Group:		X11/Servers
 Obsoletes:	X11R6.1-Sun24
 Provides:	Xserver
@@ -423,8 +423,8 @@ Requires:	%{name}-common = %{version}
 The XFree86-Sun24 package contains the X server for Sun computers with
 all supported SBUS frame buffers.
 
-%description -n XFree86-Sun24 -l pl
-XFree86-Sun24 zawiera X serwer dla komputerÛw Sun z framebufferem
+%description -n XFree86-Sun24 -l pl.UTF-8
+XFree86-Sun24 zawiera X serwer dla komputer√≥w Sun z framebufferem
 SBUS.
 
 %prep
