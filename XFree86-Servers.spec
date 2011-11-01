@@ -18,6 +18,7 @@ Patch5:		%{name}-cyrix.patch
 Patch6:		%{name}-sis.patch
 Patch7:		%{name}-3dfxalpha.patch
 Patch8:		%{name}-sparc.patch.gz
+# Patch8-md5:	447f47d07a629771a075939e198d0597
 Patch9:		%{name}-new-i810.patch
 Patch10:	%{name}-5480mem.patch
 Patch11:	%{name}-ragemobility.patch
